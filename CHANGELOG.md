@@ -22,8 +22,8 @@ Change categories are:
 ### Removed
 ### Security
 
-## [0.0.0](https://github.com/saibotsivad/micromark-extension-noddity/tree/v0.0.0) - 2022-07-08
+## [0.0.0](https://github.com/saibotsivad/mdast-util-noddity/tree/v0.0.0) - 2022-07-08
 ### Added
 - Created the base project from [saibotsivad/init](https://github.com/saibotsivad/init).
 
-[0.0.1]: https://github.com/saibotsivad/micromark-extension-noddity/compare/v0.0.0...v0.0.1
+[0.0.1]: https://github.com/saibotsivad/mdast-util-noddity/compare/v0.0.0...v0.0.1

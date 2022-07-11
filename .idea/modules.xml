@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/micromark-extension-noddity.iml" filepath="$PROJECT_DIR$/.idea/micromark-extension-noddity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mdast-util-noddity.iml" filepath="$PROJECT_DIR$/.idea/mdast-util-noddity.iml" />
     </modules>
   </component>
 </project>

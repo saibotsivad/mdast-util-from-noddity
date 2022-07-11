@@ -1,4 +1,4 @@
-# micromark-extension-noddity
+# mdast-util-noddity
 
 [Micromark](https://github.com/micromark/micromark) and [mdast](https://github.com/syntax-tree/mdast) extension to parse [noddity](http://noddity.com/) flavored markdown.
 
@@ -11,7 +11,7 @@ This package is ESM only.
 Install the usual ways:
 
 ```bash
-npm install micromark-extension-noddity
+npm install mdast-util-noddity
 ```
 
 ## Use
@@ -27,7 +27,7 @@ This is an [[file.md|internal link]] to a file. Here is a ::template.md|cars|whe
 ```js
 import { readFile } from 'node:fs/promises'
 import { fromMarkdown } from 'mdast-util-from-markdown'
-import { micromarkFromNoddity, mdastFromNoddity } from 'micromark-extension-noddity'
+import { micromarkFromNoddity, mdastFromNoddity } from 'mdast-util-noddity'
 
 const string = await readFile('example.md', 'utf8')
 const tree = fromMarkdown(string, {
@@ -124,4 +124,4 @@ If you would like to implement it, pull requests will be accepted.
 
 Published and released under the [Very Open License](http://veryopenlicense.com).
 
-If you need a commercial license, [contact me here](https://davistobias.com/license?software=micromark-extension-noddity).
+If you need a commercial license, [contact me here](https://davistobias.com/license?software=mdast-util-noddity).

@@ -1,5 +1,5 @@
 {
-  "name": "micromark-extension-noddity",
+  "name": "mdast-util-noddity",
   "version": "0.0.0",
   "description": "Micromark and mdast extension to parse noddity flavored markdown.",
   "type": "module",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saibotsivad/micromark-extension-noddity.git"
+    "url": "git+https://github.com/saibotsivad/mdast-util-noddity.git"
   },
   "keywords": [
     "unist",
@@ -36,9 +36,9 @@
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
-    "url": "https://github.com/saibotsivad/micromark-extension-noddity/issues"
+    "url": "https://github.com/saibotsivad/mdast-util-noddity/issues"
   },
-  "homepage": "https://github.com/saibotsivad/micromark-extension-noddity",
+  "homepage": "https://github.com/saibotsivad/mdast-util-noddity",
   "devDependencies": {
     "@saibotsivad/eslint-config-saibotsivad": "*",
     "mdast-util-from-markdown": "^1.2.0",
