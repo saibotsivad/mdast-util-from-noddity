@@ -110,11 +110,9 @@ These are the variables used in the template syntax, they have these properties:
 
 ## To-Do
 
-The to-markdown portion of this package is not yet available.
+The to-markdown portion of this package is not yet available. I don't have any use for it, so I probably won't get around to adding it, but pull requests will be accepted.
 
-I don't have any use for it, so I probably won't get around to adding it.
-
-If you would like to implement it, pull requests will be accepted.
+Test coverage for Noddity link and template syntax is very weak. Pull requests to add tests would be very welcome.
 
 ## License
 
