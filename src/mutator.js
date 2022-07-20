@@ -1,9 +1,9 @@
-export const noddityMdastMutator = ({ linkRenderer, templateResolver }) => {
+export const noddityMdastMutator = ({ urlRenderer, templateResolver }) => {
 	const climbTree = async (node, filename) => {
 		if (node?.type === 'noddityLink') {
 			node.type = 'link'
 			node.title = null
-			node.url = await linkRenderer({ filename, link: node.file })
+			node.url = await urlRenderer({ filename, link: node.file })
 			node.children = [ { type: 'text', value: node.text || node.file } ]
 			delete node.text
 			delete node.file
