@@ -63,11 +63,7 @@ console.log(tree)
 			"children": [
 				{
 					"type": "noddityTemplateVariable",
-					"value": "template.md"
-				},
-				{
-					"type": "noddityTemplateVariable",
-					"value": "cars"
+					"name": "cars"
 				},
 				{
 					"type": "noddityTemplateVariable",
@@ -109,8 +105,8 @@ This corresponds to the Noddity template syntax, and has these properties:
 These are the variables used in the template syntax, they have these properties:
 
 * `type = "noddityTemplateVariable"` - The type.
-* `name?: String` - If this is a named variable, the name will be here.
-* `value: String` - The value of the variable.
+* `name: String` - If this is a named variable, the name will be here.
+* `value?: String` - The value of the variable.
 
 ## To-Do
 

@@ -1,5 +1,7 @@
 import { markdownLineEnding } from 'micromark-util-character'
 
+export { noddityMdastMutator } from './mutator.js'
+
 const CHARS = {
 	CR: -5,
 	LF: -4,
@@ -187,7 +189,7 @@ export const mdastFromNoddity = () => {
 				variable.name = variableString.slice(0, firstEqualIndex)
 				variable.value = variableString.slice(firstEqualIndex + 1)
 			} else {
-				variable.value = variableString
+				variable.name = variableString
 			}
 			node.children.push(variable)
 		}
