@@ -99,7 +99,7 @@ test('basic link parsing', () => {
 							children: [
 								{
 									type: 'noddityTemplateVariable',
-									value: 'cars',
+									name: 'cars',
 								},
 								{
 									type: 'noddityTemplateVariable',
