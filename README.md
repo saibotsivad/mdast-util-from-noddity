@@ -2,7 +2,7 @@
 
 [Micromark](https://github.com/micromark/micromark) and [mdast](https://github.com/syntax-tree/mdast) extension to parse [noddity](http://noddity.com/) flavored markdown.
 
-This package does not resolve Noddity links or anything, it just parses the markdown to a tree.
+**Note:** if you're looking for a more complete library, have a look at [noddity-micromark-renderer](https://github.com/saibotsivad/noddity-micromark-renderer). This package does not resolve Noddity links or anything like that, it just parses the markdown to a tree.
 
 ## Install
 
