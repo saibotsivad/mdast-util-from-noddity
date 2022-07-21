@@ -4,7 +4,6 @@
   "description": "Micromark and mdast extension to parse noddity flavored markdown.",
   "type": "module",
   "main": "src/index.js",
-  "types": "index.d.ts",
   "scripts": {
     "test": "uvu src",
     "lint": "eslint"
