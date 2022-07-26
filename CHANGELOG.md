@@ -22,6 +22,12 @@ Change categories are:
 ### Removed
 ### Security
 
+## [1.0.0](https://github.com/saibotsivad/mdast-util-noddity/compare/v0.0.2...v1.0.0) - 2022-07-26
+### Added
+- Full test coverage, with support for templates and markdown inside link text. With full tests, I'm pretty happy with where things are, so I'll move it out of beta version.
+### Changed
+- BREAKING CHANGE: In the process of adding full test coverage for all Noddity syntax, the exact tree structure changed slightly.
+
 ## [0.0.2](https://github.com/saibotsivad/mdast-util-noddity/compare/v0.0.0...v0.0.2) - 2022-07-20
 ### Changed
 - Property name of the mutator function.

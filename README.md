@@ -90,7 +90,7 @@ This corresponds to the Noddity link syntax, and has these properties:
 
 * `type = "noddityLink"` - The type.
 * `file: String` - The file reference part of the link.
-* `text?: String` - *(Optional)* The text part of the link, if present.
+* `children?: Array<MdastTree>` - *(Optional)* If there is a text part of the link, it will be parsed as `mdast` itself, so child elements will be a deeper `mdast` tree.
 
 #### `noddityTemplate`
 

@@ -1,11 +1,10 @@
-import { markdownLineEnding } from 'micromark-util-character'
-
 export { noddityMdastMutator } from './mutator.js'
 
 const CHARS = {
 	CR: -5,
 	LF: -4,
 	CRLF: -3,
+	HORIZONTAL_TAB: -2,
 	SQUARE_BRACE_LEFT: 91,
 	SQUARE_BRACE_RIGHT: 93,
 	PIPE: 124,
@@ -14,11 +13,46 @@ const CHARS = {
 
 const LINK_FENCE_CHAR_LENGTH = 2
 
+const markdownLineEnding = code => code !== null && code < CHARS.HORIZONTAL_TAB
+
 export const micromarkFromNoddity = () => {
+
+	function tokenizeClosingLinkFence(effects, ok, nok) {
+		let sizeClose = 0
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		let self = this
+		return closeFence
+		function closeFence(code) {
+			if (code === CHARS.SQUARE_BRACE_RIGHT && !sizeClose) {
+				const previousType = self.events[self.events.length - 1][1].type
+				if (previousType !== 'noddityLinkDelimiter') effects.exit(
+					// could be closing a link, or could be closing the text
+					previousType,
+				)
+				effects.enter('noddityLinkFence')
+				effects.consume(code)
+				sizeClose++
+				return closeFence
+			} else if (code === CHARS.SQUARE_BRACE_RIGHT) {
+				sizeClose++
+				effects.consume(code)
+				if (sizeClose === LINK_FENCE_CHAR_LENGTH) {
+					effects.exit('noddityLinkFence')
+					return ok(code)
+				} else {
+					return nok(code)
+				}
+			}
+			return nok(code)
+		}
+	}
+
 	function noddityLinkTokenize(effects, ok, nok) {
 		let sizeOpen = 0
-		let sizeClose = 0
 		let marker
+		let hasBeenPiped
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		let self = this
 
 		return start
 
@@ -39,45 +73,76 @@ export const micromarkFromNoddity = () => {
 				return nok(code)
 			} else {
 				effects.exit('noddityLinkFence')
-				effects.enter('noddityLinkText')
+				effects.enter('noddityLinkUrl')
 				effects.consume(code)
-				return linkOpen
+				return linkUrlOpen
 			}
 		}
 
-		function linkOpen(code) {
-			if (markdownLineEnding(code)) { // newlines not allowed in links
-				return nok(code)
-			} else if (code === CHARS.SQUARE_BRACE_RIGHT) { // TODO right square brace not allowed in filename?
-				effects.exit('noddityLinkText')
-				effects.enter('noddityLinkFence')
-				marker = code
-				return linkClose(code)
-			} else {
-				effects.consume(code)
-				return linkOpen
-			}
+		function wasCorrectFence(code) {
+			effects.exit('noddityLink')
+			return ok(code)
 		}
 
-		function linkClose(code) {
-			if (code === marker) {
-				effects.consume(code)
-				sizeClose++
-				return linkClose
-			}
+		function wasColonInText(code) {
+			effects.consume(code)
+			return linkUrlOpen
+		}
 
-			effects.exit('noddityLinkFence')
-			if (sizeClose < LINK_FENCE_CHAR_LENGTH) {
+		function linkUrlOpen(code) {
+			const previousType = self.events[self.events.length - 1]?.[1]?.type
+			if (markdownLineEnding(code) || code === null) { // newlines not allowed in links
 				return nok(code)
+			} else if (code !== CHARS.SQUARE_BRACE_RIGHT && previousType === 'noddityLinkDelimiter') {
+				effects.enter('noddityLinkText', { contentType: 'content' })
+				effects.consume(code)
+				return linkUrlOpen
+			} else if (code === CHARS.PIPE && !hasBeenPiped) {
+				hasBeenPiped = true
+				effects.exit('noddityLinkUrl')
+				effects.enter('noddityLinkDelimiter')
+				effects.consume(code)
+				effects.exit('noddityLinkDelimiter')
+				return linkUrlOpen
+			} else if (code === CHARS.SQUARE_BRACE_RIGHT) {
+				return effects.attempt(
+					{ tokenize: tokenizeClosingLinkFence, partial: true },
+					wasCorrectFence,
+					wasColonInText,
+				)
 			} else {
-				effects.exit('noddityLink')
-				return ok(code)
+				effects.consume(code)
+				return linkUrlOpen
 			}
 		}
 	}
+
+	function tokenizeClosingTemplateFence(effects, ok, nok) {
+		let sizeClose = 0
+		return closeFence
+		function closeFence(code) {
+			if (code === CHARS.COLON && !sizeClose) {
+				effects.exit('noddityTemplateText')
+				effects.enter('noddityTemplateFence')
+				effects.consume(code)
+				sizeClose++
+				return closeFence
+			} else if (code === CHARS.COLON) {
+				sizeClose++
+				effects.consume(code)
+				if (sizeClose === LINK_FENCE_CHAR_LENGTH) {
+					effects.exit('noddityTemplateFence')
+					return ok(code)
+				} else {
+					return nok(code)
+				}
+			}
+			return nok(code)
+		}
+	}
+
 	function noddityTemplateTokenize(effects, ok, nok) {
 		let sizeOpen = 0
-		let sizeClose = 0
 		let marker
 
 		return start
@@ -95,7 +160,7 @@ export const micromarkFromNoddity = () => {
 				sizeOpen++
 				return templateSequenceOpen
 			}
-			if (sizeOpen < LINK_FENCE_CHAR_LENGTH) {
+			if (sizeOpen !== LINK_FENCE_CHAR_LENGTH) {
 				return nok(code)
 			} else {
 				effects.exit('noddityTemplateFence')
@@ -106,35 +171,27 @@ export const micromarkFromNoddity = () => {
 		}
 
 		function templateOpen(code) {
-			if (markdownLineEnding(code)) { // newlines not allowed in templates
+			if (markdownLineEnding(code) || code === null) { // newlines not allowed in templates
 				return nok(code)
-			} else if (code === CHARS.COLON) { // TODO colon not allowed in filename?
-				effects.exit('noddityTemplateText')
-				effects.enter('noddityTemplateFence')
-				marker = code
-				return templateClose(code)
+			} else if (code === CHARS.COLON) {
+				return effects.attempt(
+					{ tokenize: tokenizeClosingTemplateFence, partial: true },
+					function wasCorrectFence(code) {
+						effects.exit('noddityTemplate')
+						return ok(code)
+					},
+					function wasColonInText(code) {
+						effects.consume(code)
+						return templateOpen
+					},
+				)
 			} else {
 				effects.consume(code)
 				return templateOpen
 			}
 		}
-
-		function templateClose(code) {
-			if (code === marker) {
-				effects.consume(code)
-				sizeClose++
-				return templateClose
-			}
-
-			effects.exit('noddityTemplateFence')
-			if (sizeClose < LINK_FENCE_CHAR_LENGTH) {
-				return nok(code)
-			} else {
-				effects.exit('noddityTemplate')
-				return ok(code)
-			}
-		}
 	}
+
 	return {
 		text: {
 			[CHARS.SQUARE_BRACE_LEFT]: {
@@ -152,28 +209,35 @@ export const micromarkFromNoddity = () => {
 export const mdastFromNoddity = () => {
 	return {
 		enter: {
-			noddityLinkText: enterNoddityLinkUrl,
+			noddityLink: enterNoddityLink,
+			noddityLinkUrl: enterNoddityLinkUrl,
 			noddityTemplateText: enterNoddityTemplateText,
 		},
 		exit: {
-			noddityLinkText: exitNoddityLinkUrl,
+			noddityLink: exitNoddityLink,
+			noddityLinkUrl: exitNoddityLinkUrl,
 			noddityTemplateText: exitNoddityTemplateText,
 		},
 	}
+	function enterNoddityLink(token) {
+		this.enter({ type: 'noddityLink', children: [] }, token)
+	}
+	function exitNoddityLink(token) {
+		const node = this.exit(token)
+		if (node.children[0]?.type === 'noddityLinkUrl') {
+			const urlNode = node.children.shift()
+			node.file = urlNode.file
+		}
+		if (node.children.length === 1 && node.children[0].type === 'paragraph' && node.children[0].children) {
+			node.children = node.children[0].children
+		}
+		if (!node.children.length) delete node.children
+	}
 	function enterNoddityLinkUrl(token) {
-		this.enter({ type: 'noddityLink' }, token)
+		this.enter({ type: 'noddityLinkUrl', file: this.sliceSerialize(token) }, token)
 	}
 	function exitNoddityLinkUrl(token) {
-		const node = this.exit(token)
-		let fileString = this.sliceSerialize(token)
-		const firstPipeIndex = fileString.indexOf('|')
-		let textString
-		if (firstPipeIndex > 0) {
-			textString = fileString.slice(firstPipeIndex + 1)
-			fileString = fileString.slice(0, firstPipeIndex)
-		}
-		node.file = fileString
-		if (textString) node.text = textString
+		this.exit(token)
 	}
 	function enterNoddityTemplateText(token) {
 		this.enter({ type: 'noddityTemplate', children: [] }, token)
