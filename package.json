@@ -42,8 +42,5 @@
     "@saibotsivad/eslint-config-saibotsivad": "*",
     "mdast-util-from-markdown": "^1.2.0",
     "uvu": "^0.5.6"
-  },
-  "dependencies": {
-    "micromark-util-character": "^1.1.0"
   }
 }
