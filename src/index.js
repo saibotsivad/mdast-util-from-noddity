@@ -19,6 +19,7 @@ export const micromarkFromNoddity = () => {
 
 	function tokenizeClosingLinkFence(effects, ok, nok) {
 		let sizeClose = 0
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let self = this
 		return closeFence
 		function closeFence(code) {
@@ -50,6 +51,7 @@ export const micromarkFromNoddity = () => {
 		let sizeOpen = 0
 		let marker
 		let hasBeenPiped
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let self = this
 
 		return start
