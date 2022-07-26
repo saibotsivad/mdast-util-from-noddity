@@ -1,15 +1,10 @@
-import { markdownLineEnding } from 'micromark-util-character'
-
-import { types } from 'micromark-util-symbol/types.js'
-// import { codes } from 'micromark-util-symbol/codes.js'
-// console.log(codes)
-
 export { noddityMdastMutator } from './mutator.js'
 
 const CHARS = {
 	CR: -5,
 	LF: -4,
 	CRLF: -3,
+	HORIZONTAL_TAB: -2,
 	SQUARE_BRACE_LEFT: 91,
 	SQUARE_BRACE_RIGHT: 93,
 	PIPE: 124,
@@ -17,6 +12,8 @@ const CHARS = {
 }
 
 const LINK_FENCE_CHAR_LENGTH = 2
+
+const markdownLineEnding = code => code !== null && code < CHARS.HORIZONTAL_TAB
 
 export const micromarkFromNoddity = () => {
 
@@ -95,7 +92,7 @@ export const micromarkFromNoddity = () => {
 			if (markdownLineEnding(code) || code === null) { // newlines not allowed in links
 				return nok(code)
 			} else if (code !== CHARS.SQUARE_BRACE_RIGHT && previousType === 'noddityLinkDelimiter') {
-				effects.enter('noddityLinkText', { contentType: types.content })
+				effects.enter('noddityLinkText', { contentType: 'content' })
 				effects.consume(code)
 				return linkUrlOpen
 			} else if (code === CHARS.PIPE && !hasBeenPiped) {
