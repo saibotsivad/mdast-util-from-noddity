@@ -441,6 +441,31 @@ test('end of file in template means not a valid template', () => {
 	)
 })
 
+test('double colons at end of line parsed as a template', () => {
+	const tree = fromMarkdown('at the end of a line ::\n', {
+		extensions: [ micromarkFromNoddity() ],
+		mdastExtensions: [ mdastFromNoddity() ],
+	})
+	recurseRemovePosition(tree)
+	assert.equal(
+		tree,
+		{
+			'type': 'root',
+			'children': [
+				{
+					'type': 'paragraph',
+					'children': [
+						{
+							'type': 'text',
+							'value': 'at the end of a line ::',
+						},
+					],
+				},
+			],
+		},
+	)
+})
+
 test('template parsing where variables portion contain semicolons that are not next to each other', () => {
 	const tree = fromMarkdown('Please read ::book-description.md|My Book: It Has Words:: on the webs.', {
 		extensions: [ micromarkFromNoddity() ],

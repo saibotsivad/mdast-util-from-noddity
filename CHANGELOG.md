@@ -22,6 +22,10 @@ Change categories are:
 ### Removed
 ### Security
 
+## [1.0.1](https://github.com/saibotsivad/mdast-util-noddity/compare/v1.0.0...v1.0.1) - 2022-07-26
+### Fixed
+- Template delimiter `::` at the end of a line (without a complete template) was throwing an error.
+
 ## [1.0.0](https://github.com/saibotsivad/mdast-util-noddity/compare/v0.0.2...v1.0.0) - 2022-07-26
 ### Added
 - Full test coverage, with support for templates and markdown inside link text. With full tests, I'm pretty happy with where things are, so I'll move it out of beta version.

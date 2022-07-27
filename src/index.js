@@ -162,6 +162,8 @@ export const micromarkFromNoddity = () => {
 			}
 			if (sizeOpen !== LINK_FENCE_CHAR_LENGTH) {
 				return nok(code)
+			} else if (markdownLineEnding(code) || code === null) {
+				return nok(code)
 			} else {
 				effects.exit('noddityTemplateFence')
 				effects.enter('noddityTemplateText')
