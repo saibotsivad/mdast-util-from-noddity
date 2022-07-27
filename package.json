@@ -1,6 +1,6 @@
 {
   "name": "mdast-util-noddity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Micromark and mdast extension to parse noddity flavored markdown.",
   "type": "module",
   "main": "src/index.js",
