@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "uvu src",
+    "test": "uvu src '.test.js$'",
     "lint": "eslint"
   },
   "repository": {

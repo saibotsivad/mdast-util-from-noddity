@@ -47,6 +47,45 @@ test('basic link parsing with text', () => {
 	)
 })
 
+test('link parsing with hash fragments', () => {
+	const tree = fromMarkdown('Links [[file.md#heading|internal]] are neat', {
+		extensions: [ micromarkFromNoddity() ],
+		mdastExtensions: [ mdastFromNoddity() ],
+	})
+	recurseRemovePosition(tree)
+	assert.equal(
+		tree,
+		{
+			type: 'root',
+			children: [
+				{
+					type: 'paragraph',
+					children: [
+						{
+							type: 'text',
+							value: 'Links ',
+						},
+						{
+							type: 'noddityLink',
+							file: 'file.md#heading',
+							children: [
+								{
+									type: 'text',
+									value: 'internal',
+								},
+							],
+						},
+						{
+							type: 'text',
+							value: ' are neat',
+						},
+					],
+				},
+			],
+		},
+	)
+})
+
 test('basic link parsing without text', () => {
 	const tree = fromMarkdown('Links [[file.md]] are neat', {
 		extensions: [ micromarkFromNoddity() ],

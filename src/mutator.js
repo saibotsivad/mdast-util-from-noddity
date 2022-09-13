@@ -4,7 +4,7 @@ export const noddityMdastMutator = ({ urlRenderer, templateResolver }) => {
 			node.type = 'link'
 			node.title = null
 			node.url = await urlRenderer({ filename, link: node.file })
-			node.children = [ { type: 'text', value: node.text || node.file } ]
+			node.children = node.children || [ { type: 'text', value: node.text || node.file } ]
 			delete node.text
 			delete node.file
 			return node

@@ -22,6 +22,10 @@ Change categories are:
 ### Removed
 ### Security
 
+## [1.0.2](https://github.com/saibotsivad/mdast-util-noddity/compare/v1.0.1...v1.0.2) - 2022-09-13
+### Fixed
+- Mutator function was untested and had some bugs.
+
 ## [1.0.1](https://github.com/saibotsivad/mdast-util-noddity/compare/v1.0.0...v1.0.1) - 2022-07-26
 ### Fixed
 - Template delimiter `::` at the end of a line (without a complete template) was throwing an error.
