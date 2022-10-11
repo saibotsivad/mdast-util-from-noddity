@@ -685,4 +685,45 @@ test('link with a template', () => {
 	)
 })
 
+test('basic link parsing without text', () => {
+	const tree = fromMarkdown('Links <span>[[file.md]]</span> are neat', {
+		extensions: [ micromarkFromNoddity() ],
+		mdastExtensions: [ mdastFromNoddity() ],
+	})
+	recurseRemovePosition(tree)
+	assert.equal(
+		tree,
+		{
+			type: 'root',
+			children: [
+				{
+					type: 'paragraph',
+					children: [
+						{
+							type: 'text',
+							value: 'Links ',
+						},
+						{
+							type: 'html',
+							value: '<span>',
+						},
+						{
+							type: 'noddityLink',
+							file: 'file.md',
+						},
+						{
+							type: 'html',
+							value: '</span>',
+						},
+						{
+							type: 'text',
+							value: ' are neat',
+						},
+					],
+				},
+			],
+		},
+	)
+})
+
 test.run()

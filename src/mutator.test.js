@@ -51,6 +51,56 @@ test('basic link parsing with text', async () => {
 	)
 })
 
+test('link parsing within an html element', async () => {
+	const mutate = noddityMdastMutator({ urlRenderer: async ({ link }) => `https://site.com/#!/post/${link}` })
+	const tree = fromMarkdown('Links <span>[[file.md|internal]]</span> are neat', {
+		extensions: [ micromarkFromNoddity() ],
+		mdastExtensions: [ mdastFromNoddity() ],
+	})
+	await mutate(tree, 'virtual.md')
+	recurseRemovePosition(tree)
+	assert.equal(
+		tree,
+		{
+			type: 'root',
+			children: [
+				{
+					type: 'paragraph',
+					children: [
+						{
+							type: 'text',
+							value: 'Links ',
+						},
+						{
+							type: 'html',
+							value: '<span>',
+						},
+						{
+							type: 'link',
+							title: null,
+							url: 'https://site.com/#!/post/file.md',
+							children: [
+								{
+									type: 'text',
+									value: 'internal',
+								},
+							],
+						},
+						{
+							type: 'html',
+							value: '</span>',
+						},
+						{
+							type: 'text',
+							value: ' are neat',
+						},
+					],
+				},
+			],
+		},
+	)
+})
+
 test('link parsing with hash fragment', async () => {
 	const mutate = noddityMdastMutator({ urlRenderer: async ({ link }) => `https://site.com/${link}` })
 	const tree = fromMarkdown('Links [[file.md#header|internal]] are neat', {
