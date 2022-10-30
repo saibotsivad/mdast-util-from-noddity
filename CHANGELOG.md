@@ -16,6 +16,7 @@ Change categories are:
 
 ## [Unreleased]
 ### Added
+- Test to make it clear that this library will not parse Noddity syntax in HTML.
 ### Changed
 ### Deprecated
 ### Fixed
